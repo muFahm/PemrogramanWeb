@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Kelom</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+	<div class="main">  	
+		<input type="checkbox" id="chk" aria-hidden="true">
+
+			<div class="signup">
+				<form>
+					<label for="chk" aria-hidden="true">Daftar Akun</label>
+					<input type="text" name="txt" placeholder="Nama" required="">
+					<input type="email" name="email" placeholder="Email" required="">
+					<input type="password" name="pswd" placeholder="Password" required="">
+                    <input type="text" name="hobi" placeholder="Hobi" required="">
+                    <select name="peminatan" id="" title="Peminatan">
+                        <option value="keamanan">Keamanan Informasi</option>
+                        <option value="rpl">Rekayasa Perangkat Lunak</option>
+                        <option value="grafika">Grafika</option>
+                    </select>
+				</form>
+	</div>
+    <div class="login">
+        <form>
+            <label for="chk" aria-hidden="true">Agama</label>
+            <input type="radio" id="islam" name="agama" value="Islam">
+            <span for="islam">Islam</span>
+            <input type="radio" id="protestan" name="agama" value="Protestan">
+            <span for="protestan">Protestan</span>
+            <input type="radio" id="katolik" name="agama" value="Katolik">
+            <span for="katolik">Katolik</span>
+            <input type="radio" id="budha" name="agama" value="Budha">
+            <span for="budha">Budha</span>
+            <input type="radio" id="hindu" name="agama" value="Hindu">
+            <span for="hindu">Hindu</span>
+            <button>Submit</button>
+</body>
+</html>
