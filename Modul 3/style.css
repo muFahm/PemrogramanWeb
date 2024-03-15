@@ -1,0 +1,71 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    background-image: url('background.jpg');
+}
+
+form {
+    background-color: rgba(242, 242, 242, 0.7); /* Adjusted background color with transparency */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 5px 20px 50px rgba(255, 255, 255, 0.5); /* Adjusted box-shadow */
+    width: 350px;
+    max-width: 90%;
+}
+
+h2 {
+    color: #fff; /* Adjusted heading color */
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    color: #fff; /* Adjusted label color */
+}
+
+input[type=text], input[type=email], input[type=password] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #573b8a; /* Adjusted button color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #a000c1; /* Adjusted button hover color */
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    body {
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+  
+    form {
+        width: 100%;
+        margin: 0;
+        box-shadow: none;
+    }
+}
