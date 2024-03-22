@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Registrasi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        form {
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: fit-content;
+            max-width: 90%; 
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type=text], input[type=email], input[type=password] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 20px; 
+                flex-direction: column;
+            }
+            form {
+                width: 100%; 
+                margin: 0; 
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<form id="registrationForm">
+    <h2>Daftar Akun Baru</h2>
+    <label for="name">Nama:</label>
+    <input type="text" id="name" name="name">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email">
+    <label for="password">Kata Sandi (minimal 6 karakter):</label>
+    <input type="password" id="password" name="password">
+    <label for="confirmPassword">Konfirmasi Kata Sandi:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword">
+    
+    <button type="submit">Daftar</button>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#registrationForm').submit(function(event) {
+            event.preventDefault(); // Prevent the form from submitting via the browser.
+
+            let isValid = true; // Flag for validation state.
+            const password = $('#password').val().trim();
+            const confirmPassword = $('#confirmPassword').val().trim();
+
+            // Define array of inputs to validate.
+            const inputs = ['#name', '#email', '#password', '#confirmPassword'];
+
+            // Loop through inputs for validation.
+            inputs.forEach(function(input) {
+                const $input = $(input);
+                if ($input.val().trim() === "") {
+                    $input.css('borderColor', 'red'); // Change border to red if empty.
+                    alert(`Isian kolom ${$input.attr('name')} tidak boleh kosong`); // Alert for empty input.
+                    isValid = false; // Update validation flag.
+                    return false; // Break out of the loop.
+                } else {
+                    $input.css('borderColor', ''); // Reset border if input is filled.
+                }
+            });
+
+            // Validate password length
+            if (password.length < 6) {
+                $('#password').css('borderColor', 'red');
+                alert('Kata Sandi harus memiliki minimal 6 karakter.');
+                isValid = false;
+            }
+
+            // Validate password and confirm password
+            if (password !== confirmPassword) {
+                $('#confirmPassword').css('borderColor', 'red');
+                alert('Kata Sandi dan Konfirmasi Kata Sandi harus sama.');
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert("Pendaftaran berhasil!");
+                // Uncomment the next line to actually submit the form.
+                // this.submit(); // Submit form if all inputs are valid.
+            }
+        });
+    });
+</script>
+</body>
+</html>

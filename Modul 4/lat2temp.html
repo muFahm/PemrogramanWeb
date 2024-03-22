@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Perencanaan Proyek</title>
+</head>
+<body>
+    <h2>Form Perencanaan Proyek</h2>
+    <form action="#" method="POST">
+        <label for="nama_projek">Nama Proyek:</label><br>
+        <input type="text" id="nama_projek" name="nama_projek" required><br><br>
+        
+        <label for="tujuan_projek">Tujuan Proyek:</label><br>
+        <textarea id="tujuan_projek" name="tujuan_projek" rows="4" cols="50" required></textarea><br><br>
+        
+        <label for="estimasi_mulai">Estimasi Mulai:</label><br>
+        <input type="date" id="estimasi_mulai" name="estimasi_mulai" required><br><br>
+        
+        <label for="estimasi_selesai">Estimasi Selesai:</label><br>
+        <input type="date" id="estimasi_selesai" name="estimasi_selesai" required><br><br>
+        
+        <label for="pic">Penanggung Jawab (PIC):</label><br>
+        <input type="text" id="pic" name="pic" required><br><br>
+        
+        <label for="status">Status Penyelesaian Proyek:</label><br>
+        <select id="status" name="status" required>
+            <option value="selesai">Selesai</option>
+            <option value="berlangsung">Berlangsung</option>
+            <option value="gagal">Gagal</option>
+        </select><br><br>
+        
+        <label for="catatan">Deskripsi Catatan Akhir Kegiatan:</label><br>
+        <textarea id="catatan" name="catatan" rows="4" cols="50"></textarea><br><br>
+        
+        <input type="submit" value="Simpan">
+    </form>
+    <footer>
+        <p>Waktu Perekaman: <span id="waktu_perekaman"></span></p>
+        <p>Waktu Update Terakhir: <span id="waktu_update"></span></p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Set waktu perekaman saat halaman dimuat
+            document.getElementById("waktu_perekaman").innerText = new Date().toLocaleString();
+
+            // Fungsi untuk memperbarui waktu update terakhir saat form disubmit
+            document.querySelector("form").addEventListener("submit", function() {
+                document.getElementById("waktu_update").innerText = new Date().toLocaleString();
+            });
+        });
+    </script>
+</body>
+</html>

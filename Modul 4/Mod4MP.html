@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Proyek</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+            background-image: url('background.jpg');
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+
+        form {
+            background-color: rgba(242, 242, 242, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 5px 20px 50px rgba(255, 255, 255, 0.5);
+            width: 350px;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        input[type=text], input[type=date], select, textarea, input[type=submit] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #fff;
+            padding: 8px;
+            text-align: left;
+            color: #fff;
+        }
+
+        th {
+            background-color: #573b8a;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h2>Manajemen Proyek</h2>
+    <form id="projectForm">
+        <label for="nama">Nama Proyek:</label><br>
+        <input type="text" id="nama" name="nama"><br><br>
+
+        <label for="tujuan">Tujuan:</label><br>
+        <textarea id="tujuan" name="tujuan" rows="4" cols="50"></textarea><br><br>
+
+        <label for="tanggalMulai">Tanggal Mulai:</label><br>
+        <input type="date" id="tanggalMulai" name="tanggalMulai"><br><br>
+
+        <label for="tanggalSelesai">Tanggal Selesai:</label><br>
+        <input type="date" id="tanggalSelesai" name="tanggalSelesai"><br><br>
+
+        <label for="pic">PIC (Person In Charge):</label><br>
+        <input type="text" id="pic" name="pic"><br><br>
+
+        <label for="status">Status Penyelesaian:</label><br>
+        <select id="status" name="status">
+            <option value="selesai">Selesai</option>
+            <option value="berlangsung">Berlangsung</option>
+            <option value="gagal">Gagal</option>
+        </select><br><br>
+
+        <label for="catatan">Catatan Akhir Kegiatan:</label><br>
+        <textarea id="catatan" name="catatan" rows="4" cols="50"></textarea><br><br>
+
+        <input type="submit" value="Tambah Proyek">
+    </form>
+
+    <br>
+
+    <h2>Daftar Proyek</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama Proyek</th>
+                <th>Tujuan</th>
+                <th>Tanggal Mulai</th>
+                <th>Tanggal Selesai</th>
+                <th>PIC</th>
+                <th>Status Penyelesaian</th>
+                <th>Catatan Akhir Kegiatan</th>
+                <th>Waktu Perekaman</th>
+                <th>Waktu Update Terakhir</th>
+            </tr>
+        </thead>
+        <tbody id="projectTableBody">
+            <!-- Data proyek akan ditampilkan di sini -->
+        </tbody>
+    </table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        document.getElementById("projectForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+
+            var projectData = {};
+            formData.forEach(function(value, key){
+                projectData[key] = value;
+            });
+
+            projectData['waktuPerekaman'] = new Date().toLocaleString();
+            projectData['waktuUpdateTerakhir'] = new Date().toLocaleString();
+
+            // Cari apakah proyek sudah ada dalam tabel
+            var existingProjectRow = document.querySelector("#projectTableBody tr[data-nama='" + projectData['nama'] + "']");
+            
+            if (existingProjectRow) {
+                // Jika proyek sudah ada, perbarui data di baris yang ada
+                existingProjectRow.innerHTML = `
+                    <td>${projectData['nama']}</td>
+                    <td>${projectData['tujuan']}</td>
+                    <td>${projectData['tanggalMulai']}</td>
+                    <td>${projectData['tanggalSelesai']}</td>
+                    <td>${projectData['pic']}</td>
+                    <td>${projectData['status']}</td>
+                    <td>${projectData['catatan']}</td>
+                    <td>${projectData['waktuPerekaman']}</td>
+                    <td>${projectData['waktuUpdateTerakhir']}</td>
+                `;
+            } else {
+                // Jika proyek belum ada, tambahkan sebagai baris baru
+                var projectTableRow = "<tr data-nama='" + projectData['nama'] + "'>";
+                projectTableRow += "<td>" + projectData['nama'] + "</td>";
+                projectTableRow += "<td>" + projectData['tujuan'] + "</td>";
+                projectTableRow += "<td>" + projectData['tanggalMulai'] + "</td>";
+                projectTableRow += "<td>" + projectData['tanggalSelesai'] + "</td>";
+                projectTableRow += "<td>" + projectData['pic'] + "</td>";
+                projectTableRow += "<td>" + projectData['status'] + "</td>";
+                projectTableRow += "<td>" + projectData['catatan'] + "</td>";
+                projectTableRow += "<td>" + projectData['waktuPerekaman'] + "</td>";
+                projectTableRow += "<td>" + projectData['waktuUpdateTerakhir'] + "</td>";
+                projectTableRow += "</tr>";
+
+                document.getElementById("projectTableBody").innerHTML += projectTableRow;
+            }
+        });
+
+        $(document).ready(function() {
+            $('#projectForm').submit(function(event) {
+                event.preventDefault(); // Prevent the form from submitting via the browser.
+
+                let isValid = true; // Flag for validation state.
+
+                // Define array of inputs to validate.
+                const inputs = ['#nama', '#tujuan', '#tanggalMulai', '#tanggalSelesai', '#pic', '#status', '#catatan'];
+
+                // Loop through inputs for validation.
+                inputs.forEach(function(input) {
+                    const $input = $(input);
+                    if ($input.val().trim() === "") {
+                        $input.css('borderColor', 'red'); // Change border to red if empty.
+                        alert(`Kolom ${$input.attr('name')} harus diisi`); // Alert for empty input.
+                        isValid = false; // Update validation flag.
+                        return false; // Break out of the loop.
+                    } else {
+                        $input.css('borderColor', ''); // Reset border if input is filled.
+                    }
+                });
+
+                if (isValid) {
+                    // Proceed with form submission
+                    alert("Form telah berhasil disubmit!");
+                    // Uncomment the next line to actually submit the form.
+                    // this.submit(); // Submit form if all inputs are valid.
+                }
+            });
+        });
+    </script>
+</body>
+</html>
