@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Proyek</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+            background-image: url('background.jpg');
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+
+        form {
+            background-color: rgba(242, 242, 242, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 5px 20px 50px rgba(255, 255, 255, 0.5);
+            width: 350px;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        input[type=text], input[type=date], select, textarea, input[type=submit] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #fff;
+            padding: 8px;
+            text-align: left;
+            color: #fff;
+        }
+
+        th {
+            background-color: #573b8a;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h2>Manajemen Proyek</h2>
+    <form id="projectForm">
+        <label for="nama">Nama Proyek:</label><br>
+        <input type="text" id="nama" name="nama"><br><br>
+
+        <label for="tujuan">Tujuan:</label><br>
+        <textarea id="tujuan" name="tujuan" rows="4" cols="50"></textarea><br><br>
+
+        <label for="tanggalMulai">Tanggal Mulai:</label><br>
+        <input type="date" id="tanggalMulai" name="tanggalMulai"><br><br>
+
+        <label for="tanggalSelesai">Tanggal Selesai:</label><br>
+        <input type="date" id="tanggalSelesai" name="tanggalSelesai"><br><br>
+
+        <label for="pic">PIC (Person In Charge):</label><br>
+        <input type="text" id="pic" name="pic"><br><br>
+
+        <label for="status">Status Penyelesaian:</label><br>
+        <select id="status" name="status">
+            <option value="selesai">Selesai</option>
+            <option value="berlangsung">Berlangsung</option>
+            <option value="gagal">Gagal</option>
+        </select><br><br>
+
+        <label for="catatan">Catatan Akhir Kegiatan:</label><br>
+        <textarea id="catatan" name="catatan" rows="4" cols="50"></textarea><br><br>
+
+        <input type="submit" value="Tambah Proyek">
+    </form>
+
+    <br>
+
+    <h2>Daftar Proyek</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama Proyek</th>
+                <th>Tujuan</th>
+                <th>Tanggal Mulai</th>
+                <th>Tanggal Selesai</th>
+                <th>PIC</th>
+                <th>Status Penyelesaian</th>
+                <th>Catatan Akhir Kegiatan</th>
+                <th>Waktu Perekaman</th>
+                <th>Waktu Update Terakhir</th>
+            </tr>
+        </thead>
+        <tbody id="projectTableBody">
+            <!-- Data proyek akan ditampilkan di sini -->
+        </tbody>
+    </table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        document.getElementById("projectForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+        function addProject() {
+            // Ambil nilai dari form
+            var nama = document.getElementById("nama").value;
+            var tujuan = document.getElementById("tujuan").value;
+            var tanggalMulai = document.getElementById("tanggalMulai").value;
+            var tanggalSelesai = document.getElementById("tanggalSelesai").value;
+            var pic = document.getElementById("pic").value;
+            var status = document.getElementById("status").value;
+            var catatan = document.getElementById("catatan").value;
+
+            // Cek apakah semua bidang sudah diisi
+            if (nama && tujuan && tanggalMulai && tanggalSelesai && pic && status && catatan) {
+                // Simpan proyek ke dalam localStorage
+                saveProject(nama, tujuan, tanggalMulai, tanggalSelesai, pic, status, catatan);
+                // Reset form setelah proyek ditambahkan
+                document.getElementById("projectForm").reset();
+            } else {
+                alert("Silakan lengkapi semua bidang formulir.");
+            }
+        }
+
+        function saveProject(nama, tujuan, tanggalMulai, tanggalSelesai, pic, status, catatan) {
+            let projects = localStorage.getItem('projects') ? JSON.parse(localStorage.getItem('projects')) : [];
+            let currentTime = new Date().toLocaleString();
+            projects.push({ nama, tujuan, tanggalMulai, tanggalSelesai, pic, status, catatan, waktuPerekaman: currentTime, waktuUpdateTerakhir: currentTime });
+            localStorage.setItem('projects', JSON.stringify(projects));
+            loadProjects(); // Memperbarui tabel proyek
+        }
+
+        function loadProjects() {
+            let projects = localStorage.getItem('projects') ? JSON.parse(localStorage.getItem('projects')) : [];
+            const tableBody = document.getElementById("projectTableBody");
+            tableBody.innerHTML = ''; // Kosongkan isi tabel
+
+            projects.forEach(project => {
+                var row = tableBody.insertRow();
+                row.insertCell().textContent = project.nama;
+                row.insertCell().textContent = project.tujuan;
+                row.insertCell().textContent = project.tanggalMulai;
+                row.insertCell().textContent = project.tanggalSelesai;
+                row.insertCell().textContent = project.pic;
+                row.insertCell().textContent = project.status;
+                row.insertCell().textContent = project.catatan;
+                row.insertCell().textContent = project.waktuPerekaman;
+                row.insertCell().textContent = project.waktuUpdateTerakhir;
+            });
+        }
+
+        // Inisialisasi data buku saat halaman web dimuat
+        window.onload = function() {
+            loadProjects();
+        };
+    });
+
+        $(document).ready(function() {
+            $('#projectForm').submit(function(event) {
+                event.preventDefault(); // Prevent the form from submitting via the browser.
+
+                let isValid = true; // Flag for validation state.
+
+                // Define array of inputs to validate.
+                const inputs = ['#nama', '#tujuan', '#tanggalMulai', '#tanggalSelesai', '#pic', '#status', '#catatan'];
+
+                // Loop through inputs for validation.
+                inputs.forEach(function(input) {
+                    const $input = $(input);
+                    if ($input.val().trim() === "") {
+                        $input.css('borderColor', 'red'); // Change border to red if empty.
+                        alert(`Kolom ${$input.attr('name')} harus diisi`); // Alert for empty input.
+                        isValid = false; // Update validation flag.
+                        return false; // Break out of the loop.
+                    } else {
+                        $input.css('borderColor', ''); // Reset border if input is filled.
+                    }
+                });
+
+                if (isValid) {
+                    // Proceed with form submission
+                    alert("Form telah berhasil disubmit!");
+                    // Uncomment the next line to actually submit the form.
+                    // this.submit(); // Submit form if all inputs are valid.
+                }
+            });
+        });
+
+        
+
+    </script>
+</body>
+</html>

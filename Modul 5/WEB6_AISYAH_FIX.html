@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Proyek</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+            background-image: url('background.jpg');
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+
+        form {
+            background-color: rgba(242, 242, 242, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 5px 20px 50px rgba(255, 255, 255, 0.5);
+            width: 350px;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        input[type=text], input[type=date], select, textarea, input[type=submit] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #fff;
+            padding: 8px;
+            text-align: left;
+            color: #fff;
+        }
+
+        th {
+            background-color: #573b8a;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .error {
+            border-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Manajemen Proyek</h2>
+    <form id="projectForm">
+        <label for="nama">Nama Proyek:</label><br>
+        <input type="text" id="nama" name="nama"><br><br>
+
+        <label for="tujuan">Tujuan:</label><br>
+        <textarea id="tujuan" name="tujuan" rows="4" cols="50"></textarea><br><br>
+
+        <label for="tanggalMulai">Tanggal Mulai:</label><br>
+        <input type="date" id="tanggalMulai" name="tanggalMulai"><br><br>
+
+        <label for="tanggalSelesai">Tanggal Selesai:</label><br>
+        <input type="date" id="tanggalSelesai" name="tanggalSelesai"><br><br>
+
+        <label for="pic">PIC (Person In Charge):</label><br>
+        <input type="text" id="pic" name="pic"><br><br>
+
+        <label for="status">Status Penyelesaian:</label><br>
+        <select id="status" name="status">
+            <option value="selesai">Selesai</option>
+            <option value="berlangsung">Berlangsung</option>
+            <option value="gagal">Gagal</option>
+        </select><br><br>
+
+        <label for="catatan">Catatan Akhir Kegiatan:</label><br>
+        <textarea id="catatan" name="catatan" rows="4" cols="50"></textarea><br><br>
+
+        <input type="submit" value="Tambah Proyek">
+    </form>
+
+    <br>
+
+    <h2>Daftar Proyek</h2>
+    <input type="text" id="searchInput" placeholder="Cari nama proyek...">
+    <button onclick="searchProjects()">Cari</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama Proyek</th>
+                <th>Tujuan</th>
+                <th>Tanggal Mulai</th>
+                <th>Tanggal Selesai</th>
+                <th>PIC</th>
+                <th>Status Penyelesaian</th>
+                <th>Catatan Akhir Kegiatan</th>
+                <th>Waktu Perekaman</th>
+                <th>Waktu Update Terakhir</th>
+            </tr>
+        </thead>
+        <tbody id="projectTableBody">
+            <!-- Data proyek akan ditampilkan di sini -->
+        </tbody>
+    </table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // Function to save projects data to localStorage
+        function saveProjectsToLocalStorage() {
+            localStorage.setItem('projectsData', JSON.stringify(projectsData));
+        }
+
+        // Function to load projects data from localStorage
+        function loadProjectsFromLocalStorage() {
+            var data = localStorage.getItem('projectsData');
+            return data ? JSON.parse(data) : [];
+        }
+
+        // Initialize projectsData array with data from localStorage
+        var projectsData = loadProjectsFromLocalStorage();
+
+        // Function to add or update project
+        function addOrUpdateProject(projectData) {
+            var existingProjectIndex = projectsData.findIndex(function(project) {
+                return project.nama === projectData.nama;
+            });
+
+            if (existingProjectIndex !== -1) {
+                projectsData[existingProjectIndex] = projectData;
+            } else {
+                projectsData.push(projectData);
+            }
+
+            saveProjectsToLocalStorage();
+            renderProjectsTable();
+        }
+
+        // Event listener for form submission
+        document.getElementById("projectForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+            var projectData = {};
+
+            // Check for empty fields
+            var isEmptyField = false;
+            formData.forEach(function(value, key){
+                if (!value.trim()) { // Check if value is empty or whitespace
+                    alert("Kolom " + key + " tidak boleh kosong!");
+                    isEmptyField = true;
+                }
+                projectData[key] = value;
+            });
+
+            if (isEmptyField) return; // Stop further execution if any field is empty
+
+            // Proceed if all fields are filled
+            projectData['waktuPerekaman'] = new Date().toLocaleString();
+            projectData['waktuUpdateTerakhir'] = new Date().toLocaleString();
+
+            addOrUpdateProject(projectData);
+
+            // Alert for successful submission
+            alert("Proyek berhasil disubmit!");
+        });
+
+
+        // Function to render projects to table
+        function renderProjectsTable(projects = projectsData) { // Accept projects as parameter with default value
+            var tableBody = document.getElementById("projectTableBody");
+            tableBody.innerHTML = "";
+
+            projects.forEach(function(project) {
+                var projectTableRow = "<tr>";
+                projectTableRow += "<td>" + project['nama'] + "</td>";
+                projectTableRow += "<td>" + project['tujuan'] + "</td>";
+                projectTableRow += "<td>" + project['tanggalMulai'] + "</td>";
+                projectTableRow += "<td>" + project['tanggalSelesai'] + "</td>";
+                projectTableRow += "<td>" + project['pic'] + "</td>";
+                projectTableRow += "<td>" + project['status'] + "</td>";
+                projectTableRow += "<td>" + project['catatan'] + "</td>";
+                projectTableRow += "<td>" + project['waktuPerekaman'] + "</td>";
+                projectTableRow += "<td>" + project['waktuUpdateTerakhir'] + "</td>";
+
+                tableBody.innerHTML += projectTableRow;
+            });
+        }
+
+        // Event listener for form submission
+        document.getElementById("projectForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+
+            var projectData = {};
+            formData.forEach(function(value, key){
+                projectData[key] = value;
+            });
+
+            projectData['waktuPerekaman'] = new Date().toLocaleString();
+            projectData['waktuUpdateTerakhir'] = new Date().toLocaleString();
+
+            addOrUpdateProject(projectData);
+        });
+
+        // Function for project search
+        function searchProjects() {
+            var searchTerm = document.getElementById("searchInput").value.toLowerCase();
+
+            var filteredProjects = projectsData.filter(function(project) {
+                return project['nama'].toLowerCase().includes(searchTerm);
+            });
+
+            renderProjectsTable(filteredProjects);
+        }
+
+        // Call renderProjectsTable function on page load
+        renderProjectsTable();
+    </script>
+</body>
+</html>
