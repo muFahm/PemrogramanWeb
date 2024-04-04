@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Search</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Flight Search</h1>
+        <form id="searchForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="jenis">Jenis Tiket:</label>
+                    <select id="jenis">
+                        <option value="oneway">Oneway</option>
+                        <option value="return">Return</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="minPrice">Harga Tiket Minimal:</label>
+                    <input type="number" id="minPrice" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="maxPrice">Harga Tiket Maksimal:</label>
+                    <input type="number" id="maxPrice" min="0">
+                </div>
+                <button type="submit" id="searchBtn">Cari</button>
+            </div>
+        </form>
+        <div id="results"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
