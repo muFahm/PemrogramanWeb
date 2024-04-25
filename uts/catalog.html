@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - Katalog Produk</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Katalog Produk</h2>
+        <form id="searchForm">
+            <input type="text" id="searchInput" placeholder="Cari barang...">
+            <button type="submit">Cari</button>
+        </form>
+        <button onclick="goToAddProduct()">Tambah Barang</button>
+        <table id="productTable">
+            <thead>
+                <tr>
+                    <th>Nama Barang</th>
+                    <th>Tahun Pembuatan</th>
+                    <th>Kategori</th>
+                    <th>Model</th>
+                    <th>Kuantitas</th>
+                    <th>Harga</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="productList">
+                <!-- Data barang akan dimasukkan disini dengan JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
